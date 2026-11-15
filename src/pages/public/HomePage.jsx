@@ -57,6 +57,34 @@ export default function HomePage() {
   const links = data?.links || []
   return <>
     <SEO title={profile?.full_name || SITE.name} description={profile?.about || SITE.description} />
+    
+<div
+  aria-hidden="true"
+  className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+>
+  {Array.from({ length: 18 }).map((_, index) => (
+    <motion.span
+      key={index}
+      className="absolute h-1 w-1 rounded-full bg-accent/50"
+      style={{
+        left: `${(index * 37) % 100}%`,
+        top: `${(index * 53) % 100}%`,
+      }}
+      animate={{
+        y: [0, -35, 0],
+        opacity: [0.15, 0.7, 0.15],
+        scale: [1, 1.5, 1],
+      }}
+      transition={{
+        duration: 5 + (index % 5),
+        repeat: Infinity,
+        ease: 'easeInOut',
+        delay: index * 0.3,
+      }}
+    />
+  ))}
+</div>
+
     <section className="relative isolate overflow-hidden border-b border-border">
 
 <div
