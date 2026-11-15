@@ -3,6 +3,8 @@ export const ADMIN_NAV = [
   { to: '/admin', label: 'Dashboard', icon: 'dashboard', ready: true, end: true },
   { to: '/admin/profile', label: 'Profile', icon: 'user', ready: true },
   { to: '/admin/academics', label: 'Academics', icon: 'academics', ready: true },
+    { to: '/admin/schooling', label: 'Schooling', icon: 'academics', ready: true },
+  { to: '/admin/intermediate', label: 'Intermediate', icon: 'academics', ready: true },
   { to: '/admin/skills', label: 'Skills', icon: 'skills', ready: true },
   { to: '/admin/coding-profiles', label: 'Coding profiles', icon: 'code', ready: true },
   { to: '/admin/projects', label: 'Projects', icon: 'projects', ready: true },

@@ -9,14 +9,14 @@ import { ADMIN_NAV } from '@/config/adminNav'
 import { CONTENT_SCHEMAS } from '@/config/contentSchemas'
 import { deleteContent, listContent, saveContent, setPublished } from '@/services/contentService'
 
-const routeToTable={'profile':'profiles','academics':'academic_records','skills':'skills','coding-profiles':'coding_profiles','projects':'projects','internships':'internships','certifications':'certifications','hackathons':'hackathons','research':'research','achievements':'achievements','links':'professional_links','learning':'learning_timeline','resume':'profiles','settings':'website_settings'}
+const routeToTable={'profile':'profiles','academics':'academic_records','schooling':'education_records','intermediate':'education_records','skills':'skills','coding-profiles':'coding_profiles','projects':'projects','internships':'internships','certifications':'certifications','hackathons':'hackathons','research':'research','achievements':'achievements','links':'professional_links','learning':'learning_timeline','resume':'profiles','settings':'website_settings'}
 const blank=(schema)=>Object.fromEntries(schema.fields.map(([key,,type])=>[key,type==='checkbox'?false:type==='number'?'':'' ]))
 const pretty=(v)=>Array.isArray(v)?v.join(', '):(v??'')
 
 export default function AdminSectionPage(){
  const {pathname}=useLocation(); const segment=pathname.split('/').filter(Boolean)[1]||''; const table=routeToTable[segment]; const schema=CONTENT_SCHEMAS[table]
  const [rows,setRows]=useState([]),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[editing,setEditing]=useState(null),[form,setForm]=useState({}),[error,setError]=useState(''),[refresh,setRefresh]=useState(0)
- const title=schema?.label||ADMIN_NAV.find(x=>x.to===pathname)?.label||'Admin section'
+const title=ADMIN_NAV.find(x=>x.to===pathname)?.label||schema?.label||'Admin section'
  const load=useCallback(async()=>{ if(!schema)return; setLoading(true);setError('');try{setRows(await listContent(table))}catch(e){setError(e.message||'Could not load records.')}finally{setLoading(false)} },[schema,table])
  // Loading is an external data synchronization; the callback owns its loading/error state.
  // eslint-disable-next-line react-hooks/set-state-in-effect

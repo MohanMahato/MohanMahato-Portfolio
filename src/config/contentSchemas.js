@@ -3,6 +3,20 @@ export const CONTENT_SCHEMAS = {
   profiles: { label:'Profile', singular:'Profile', singleton:true, fields:[
     ['full_name','Full name','text',true],['headline','Headline','text'],['intro','Short introduction','textarea'],['about','About','textarea'],['programme','Programme','text'],['university','University','text'],['current_semester','Current semester','number'],['admission_year','Admission year','number'],['expected_graduation_year','Expected graduation year','number'],['cgpa','CGPA (optional)','number'],['location','Location','text'],['contact_email','Contact email','email'],['career_interest','Career interest','text'],['avatar_path','Profile photo path / URL','text'],['resume_path','Resume file path','text'],['is_published','Publish profile','checkbox'] ] },
   academic_records:{label:'Academics',singular:'Academic record',fields:[['semester_number','Semester number','number',true],['title','Title','text'],['academic_year','Academic year (e.g. 2025-26)','text'],['start_date','Start date','date'],['end_date','End date','date'],['status','Status','select',['upcoming','in_progress','completed']],['sgpa','SGPA (optional)','number'],['credits_earned','Credits earned','number'],['remarks','Remarks','textarea'],['is_published','Publish','checkbox']]},
+ education_records: {
+  label: 'Education',
+  singular: 'Education record',
+  fields: [
+    ['level', 'Education level', 'select', ['schooling', 'intermediate']],
+    ['institution', 'School / College name', 'text', true],
+    ['location', 'Location', 'text'],
+    ['board', 'Board', 'text'],
+    ['passing_year', 'Passing year', 'number'],
+    ['percentage', 'Percentage', 'number'],
+    ['display_order', 'Display order', 'number'],
+    ['is_published', 'Publish', 'checkbox']
+  ]
+},
   skills:{label:'Skills',singular:'Skill',fields:[['category','Category','text',true],['name','Skill name','text',true],['proficiency','Proficiency','select',['beginner','intermediate','advanced']],['icon','Icon name (optional)','text'],['display_order','Display order','number'],['is_published','Publish','checkbox']]},
   coding_profiles:{label:'Coding profiles',singular:'Coding profile',fields:[['platform','Platform','text',true],['username','Username','text'],['profile_url','Profile URL','url',true],['stats_note','Stats / note','textarea'],['display_order','Display order','number'],['is_published','Publish','checkbox']]},
   projects:{label:'Projects',singular:'Project',fields:[['title','Project title','text',true],['slug','URL slug (lowercase-hyphen)','text',true],['short_description','Short description','textarea'],['long_description','Full description','textarea'],['tech_stack','Tech stack (comma separated)','tags'],['github_url','GitHub URL','url'],['live_url','Live demo URL','url'],['cover_image_path','Cover image path / URL','text'],['status','Status','select',['planned','in_progress','completed']],['is_featured','Featured project','checkbox'],['start_date','Start date','date'],['end_date','End date','date'],['display_order','Display order','number'],['is_published','Publish','checkbox']]},
