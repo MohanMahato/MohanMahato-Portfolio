@@ -87,28 +87,93 @@ export default function HomePage() {
 
     <section className="relative isolate overflow-hidden border-b border-border">
 
+
 <div
   aria-hidden="true"
   className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
 >
+  {/* Large moving purple glow */}
   <motion.div
-    className="absolute -left-32 top-10 h-96 w-96 rounded-full bg-accent/20 blur-[100px]"
-    animate={{ x: [0, 100, 30, 0], y: [0, 60, -30, 0], scale: [1, 1.2, 0.9, 1] }}
-    transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+    className="absolute -left-40 top-0 h-[520px] w-[520px] rounded-full bg-accent/35 blur-[110px]"
+    animate={{
+      x: [0, 160, 60, 0],
+      y: [0, 100, -60, 0],
+      scale: [1, 1.35, 0.9, 1],
+    }}
+    transition={{
+      duration: 14,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    }}
   />
 
+  {/* Cyan energy glow */}
   <motion.div
-    className="absolute -right-32 top-40 h-96 w-96 rounded-full bg-accent-2/20 blur-[110px]"
-    animate={{ x: [0, -100, -30, 0], y: [0, -50, 40, 0], scale: [1, 0.85, 1.2, 1] }}
-    transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+    className="absolute -right-40 top-20 h-[550px] w-[550px] rounded-full bg-accent-2/35 blur-[120px]"
+    animate={{
+      x: [0, -170, -60, 0],
+      y: [0, 100, -80, 0],
+      scale: [1, 0.8, 1.3, 1],
+    }}
+    transition={{
+      duration: 17,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    }}
   />
 
+  {/* Bottom floating glow */}
   <motion.div
-    className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-purple-500/10 blur-[100px]"
-    animate={{ x: [0, 80, -50, 0], y: [0, -60, 20, 0] }}
-    transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+    className="absolute bottom-[-180px] left-1/3 h-[450px] w-[450px] rounded-full bg-accent/25 blur-[110px]"
+    animate={{
+      x: [0, 140, -100, 0],
+      y: [0, -120, 30, 0],
+      scale: [1, 1.25, 0.85, 1],
+    }}
+    transition={{
+      duration: 19,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    }}
+  />
+
+  {/* Rotating neon energy ring */}
+  <motion.div
+    className="absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent/20"
+    animate={{ rotate: 360, scale: [1, 1.08, 1] }}
+    transition={{
+      rotate: {
+        duration: 35,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+      scale: {
+        duration: 8,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    }}
+  />
+
+  {/* Second energy ring */}
+  <motion.div
+    className="absolute left-1/2 top-1/2 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent-2/25"
+    animate={{ rotate: -360, scale: [1, 0.9, 1] }}
+    transition={{
+      rotate: {
+        duration: 28,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+      scale: {
+        duration: 7,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    }}
   />
 </div>
+
 
       <div className="container-page grid min-h-[76vh] items-center gap-12 py-20 lg:grid-cols-[1.3fr_.7fr] lg:py-28">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .55 }}>
