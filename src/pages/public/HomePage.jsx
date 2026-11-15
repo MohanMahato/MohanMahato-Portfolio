@@ -58,7 +58,30 @@ export default function HomePage() {
   return <>
     <SEO title={profile?.full_name || SITE.name} description={profile?.about || SITE.description} />
     <section className="relative isolate overflow-hidden border-b border-border">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_15%_10%,rgb(var(--accent)/.18),transparent_42%),radial-gradient(ellipse_at_90%_80%,rgb(var(--accent-2)/.12),transparent_38%)]" />
+
+<div
+  aria-hidden="true"
+  className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+>
+  <motion.div
+    className="absolute -left-32 top-10 h-96 w-96 rounded-full bg-accent/20 blur-[100px]"
+    animate={{ x: [0, 100, 30, 0], y: [0, 60, -30, 0], scale: [1, 1.2, 0.9, 1] }}
+    transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+  />
+
+  <motion.div
+    className="absolute -right-32 top-40 h-96 w-96 rounded-full bg-accent-2/20 blur-[110px]"
+    animate={{ x: [0, -100, -30, 0], y: [0, -50, 40, 0], scale: [1, 0.85, 1.2, 1] }}
+    transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+  />
+
+  <motion.div
+    className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-purple-500/10 blur-[100px]"
+    animate={{ x: [0, 80, -50, 0], y: [0, -60, 20, 0] }}
+    transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+  />
+</div>
+
       <div className="container-page grid min-h-[76vh] items-center gap-12 py-20 lg:grid-cols-[1.3fr_.7fr] lg:py-28">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .55 }}>
           <Badge tone="accent"><Sparkles className="mr-1 inline h-3 w-3" /> Student portfolio</Badge>
