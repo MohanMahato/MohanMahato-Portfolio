@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Mail, MapPin, ExternalLink, GraduationCap, Code2, Sparkles } from 'lucide-react'
 import SEO from '@/components/common/SEO'
 import SectionHeading from '@/components/common/SectionHeading'
@@ -10,9 +10,28 @@ import Skeleton from '@/components/ui/Skeleton'
 import { SITE } from '@/config/site'
 import { fetchPortfolio } from '@/services/publicPortfolioService'
 
+
 function Section({ id, eyebrow, title, children }) {
-  return <section id={id} className="container-page scroll-mt-24 py-14 sm:py-20"><SectionHeading eyebrow={eyebrow} title={title} />{children}</section>
+  const shouldReduceMotion = useReducedMotion()
+
+  return (
+    <motion.section
+      id={id}
+      className="container-page scroll-mt-24 py-14 sm:py-20"
+      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{
+        duration: shouldReduceMotion ? 0 : 0.6,
+        ease: 'easeOut',
+      }}
+    >
+      <SectionHeading eyebrow={eyebrow} title={title} />
+      {children}
+    </motion.section>
+  )
 }
+
 function External({ href, children }) {
   if (!href) return null
   return <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline">{children}<ExternalLink className="h-3.5 w-3.5" /></a>
@@ -68,8 +87,82 @@ export default function HomePage() {
     </section>
     {isPending && <div className="container-page grid gap-4 py-12 md:grid-cols-3"><Skeleton className="h-32" /><Skeleton className="h-32" /><Skeleton className="h-32" /></div>}
     {profile?.about && <Section id="about" eyebrow="A little about me" title="About"><Card><p className="whitespace-pre-line leading-8 text-muted">{profile.about}</p></Card></Section>}
-    {(data?.skills?.length > 0) && <Section id="skills" eyebrow="What I work with" title="Skills"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{data.skills.map((skill) => <Card key={skill.id}><p className="text-xs uppercase tracking-wider text-muted">{skill.category}</p><h3 className="mt-2 text-lg font-semibold">{skill.name}</h3>{skill.proficiency && <p className="mt-1 text-sm capitalize text-muted">{skill.proficiency}</p>}</Card>)}</div></Section>}
-    {(data?.projects?.length > 0) && <Section id="projects" eyebrow="Selected work" title="Projects"><div className="grid gap-5 md:grid-cols-2">{data.projects.slice(0, 4).map((project) => <ProjectCard key={project.id} project={project} />)}</div><div className="mt-6"><Button as="a" href="/projects" variant="secondary">View all projects</Button></div></Section>}
+    
+{(data?.skills?.length > 0) && (
+  <Section
+    id="skills"
+    eyebrow="What I work with"
+    title="Skills"
+  >
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {data.skills.map((skill, index) => (
+        <motion.div
+          key={skill.id}
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: 0.45,
+            delay: index * 0.1,
+            ease: 'easeOut',
+          }}
+          whileHover={{ y: -6 }}
+        >
+          <Card className="h-full transition-shadow duration-300 hover:shadow-glow">
+            <p className="text-xs uppercase tracking-wider text-muted">
+              {skill.category}
+            </p>
+
+            <h3 className="mt-2 text-lg font-semibold">
+              {skill.name}
+            </h3>
+
+            {skill.proficiency && (
+              <p className="mt-1 text-sm capitalize text-muted">
+                {skill.proficiency}
+              </p>
+            )}
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  </Section>
+)}
+
+    
+{(data?.projects?.length > 0) && (
+  <Section
+    id="projects"
+    eyebrow="Selected work"
+    title="Projects"
+  >
+    <div className="grid gap-5 md:grid-cols-2">
+      {data.projects.slice(0, 4).map((project, index) => (
+        <motion.div
+          key={project.id}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{
+            duration: 0.5,
+            delay: index * 0.12,
+            ease: 'easeOut',
+          }}
+          whileHover={{ y: -7, scale: 1.01 }}
+        >
+          <ProjectCard project={project} />
+        </motion.div>
+      ))}
+    </div>
+
+    <div className="mt-6">
+      <Button as="a" href="/projects" variant="secondary">
+        View all projects
+      </Button>
+    </div>
+  </Section>
+)}
+
     {(data?.academics?.length > 0) && <Section id="academics" eyebrow="Education" title="Academic journey"><div className="grid gap-4 md:grid-cols-2">{data.academics.map((item) => <Card key={item.id}><div className="flex items-center gap-3"><GraduationCap className="h-5 w-5 text-accent" /><Badge>{`Semester ${item.semester_number}`}</Badge><span className="text-xs text-muted">{item.academic_year}</span></div><h3 className="mt-3 text-lg font-semibold">{item.title || `Semester ${item.semester_number}`}</h3><div className="mt-3 flex flex-wrap gap-4 text-sm text-muted">{item.sgpa !== null && item.sgpa !== undefined && <span>SGPA <strong className="text-fg">{Number(item.sgpa).toFixed(2)}</strong></span>}{item.credits_earned !== null && item.credits_earned !== undefined && <span>Credits {item.credits_earned}</span>}</div></Card>)}</div></Section>}
     
     {(data?.education?.length > 0) && <Section id="education" eyebrow="My background" title="Schooling & Intermediate">
@@ -89,8 +182,132 @@ export default function HomePage() {
         </Card>)}
       </div>
     </Section>}
-    {(data?.certifications?.length > 0 || data?.internships?.length > 0 || data?.hackathons?.length > 0 || data?.achievements?.length > 0) && <Section id="experience" eyebrow="Growth & experience" title="Milestones"><div className="grid gap-4 md:grid-cols-2">{[...(data.certifications || []).map((x) => ({ ...x, heading: x.title, sub: x.issuer, type: 'Certification' })), ...(data.internships || []).map((x) => ({ ...x, heading: x.role, sub: x.company, type: 'Internship' })), ...(data.hackathons || []).map((x) => ({ ...x, heading: x.name, sub: x.organizer, type: 'Hackathon' })), ...(data.achievements || []).map((x) => ({ ...x, heading: x.title, sub: x.organization, type: 'Achievement' }))].map((item) => <Card key={`${item.type}-${item.id}`}><p className="text-xs uppercase tracking-wider text-muted">{item.type}</p><h3 className="mt-2 font-semibold">{item.heading}</h3>{item.sub && <p className="mt-1 text-sm text-muted">{item.sub}</p>}{item.description && <p className="mt-3 text-sm leading-6 text-muted">{item.description}</p>}{item.credential_url && <div className="mt-3"><External href={item.credential_url}>View credential</External></div>}</Card>)}</div></Section>}
+
+{(data?.certifications?.length > 0 ||
+  data?.internships?.length > 0 ||
+  data?.hackathons?.length > 0 ||
+  data?.achievements?.length > 0) && (
+  <Section
+    id="experience"
+    eyebrow="Growth & experience"
+    title="Milestones"
+  >
+    <div className="grid gap-4 md:grid-cols-2">
+      {[
+        ...(data.certifications || []).map((x) => ({
+          ...x,
+          heading: x.title,
+          sub: x.issuer,
+          type: 'Certification',
+        })),
+        ...(data.internships || []).map((x) => ({
+          ...x,
+          heading: x.role,
+          sub: x.company,
+          type: 'Internship',
+        })),
+        ...(data.hackathons || []).map((x) => ({
+          ...x,
+          heading: x.name,
+          sub: x.organizer,
+          type: 'Hackathon',
+        })),
+        ...(data.achievements || []).map((x) => ({
+          ...x,
+          heading: x.title,
+          sub: x.organization,
+          type: 'Achievement',
+        })),
+      ].map((item, index) => (
+        <motion.div
+          key={`${item.type}-${item.id}`}
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{
+            duration: 0.5,
+            delay: index * 0.1,
+            ease: 'easeOut',
+          }}
+          whileHover={{ y: -6 }}
+        >
+          <Card className="h-full transition-shadow duration-300 hover:shadow-glow">
+            <p className="text-xs uppercase tracking-wider text-muted">
+              {item.type}
+            </p>
+
+            <h3 className="mt-2 font-semibold">
+              {item.heading}
+            </h3>
+
+            {item.sub && (
+              <p className="mt-1 text-sm text-muted">
+                {item.sub}
+              </p>
+            )}
+
+            {item.description && (
+              <p className="mt-3 text-sm leading-6 text-muted">
+                {item.description}
+              </p>
+            )}
+
+            {item.credential_url && (
+              <div className="mt-3">
+                <External href={item.credential_url}>
+                  View credential
+                </External>
+              </div>
+            )}
+          </Card>
+        </motion.div>
+      ))}
+    </div>
+  </Section>
+)}
+
     {(data?.codingProfiles?.length > 0 || data?.learning?.length > 0 || data?.research?.length > 0) && <Section id="more" eyebrow="Beyond the classroom" title="Learning & building"><div className="grid gap-4 md:grid-cols-2">{(data.codingProfiles || []).map((item) => <Card key={item.id}><Code2 className="h-5 w-5 text-accent" /><h3 className="mt-2 font-semibold">{item.platform}</h3><p className="text-sm text-muted">{item.username} {item.stats_note}</p><div className="mt-3"><External href={item.profile_url}>View profile</External></div></Card>)}{(data.learning || []).map((item) => <Card key={item.id}><p className="text-xs uppercase tracking-wider text-muted">Learning timeline</p><h3 className="mt-2 font-semibold">{item.title}</h3><p className="text-sm text-muted">{item.provider} · {item.status?.replaceAll('_', ' ')}</p>{item.notes && <p className="mt-2 text-sm text-muted">{item.notes}</p>}</Card>)}{(data.research || []).map((item) => <Card key={item.id}><p className="text-xs uppercase tracking-wider text-muted">Research · {item.kind}</p><h3 className="mt-2 font-semibold">{item.title}</h3><p className="mt-2 text-sm text-muted">{item.description}</p><External href={item.link_url}>Read more</External></Card>)}</div></Section>}
-    <section id="contact" className="container-page pb-20 pt-8"><Card className="overflow-hidden bg-gradient-to-br from-accent/15 via-surface to-accent-2/15 p-8 sm:p-12"><div className="max-w-2xl"><Badge tone="accent">Contact</Badge><h2 className="mt-4 text-3xl font-bold sm:text-4xl">Let’s connect and build something meaningful.</h2><p className="mt-3 text-muted">For collaborations, learning opportunities or project discussions, feel free to reach out.</p>{profile?.contact_email && <div className="mt-6"><Button as="a" href={`mailto:${profile.contact_email}`}><Mail className="mr-2 h-4 w-4" /> Email me</Button></div>}</div></Card></section>
+    
+<motion.section
+  id="contact"
+  className="container-page pb-20 pt-8"
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.2 }}
+  transition={{ duration: 0.6, ease: 'easeOut' }}
+>
+  <motion.div
+    whileHover={{ y: -5 }}
+    transition={{ duration: 0.3 }}
+  >
+    <Card className="overflow-hidden bg-gradient-to-br from-accent/15 via-surface to-accent-2/15 p-8 sm:p-12 transition-shadow duration-300 hover:shadow-glow">
+      <div className="max-w-2xl">
+        <Badge tone="accent">Contact</Badge>
+
+        <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
+          Let’s connect and build something meaningful.
+        </h2>
+
+        <p className="mt-3 text-muted">
+          For collaborations, learning opportunities or project discussions,
+          feel free to reach out.
+        </p>
+
+        {profile?.contact_email && (
+          <div className="mt-6">
+            <Button
+              as="a"
+              href={`mailto:${profile.contact_email}`}
+            >
+              <Mail className="mr-2 h-4 w-4" />
+              Email me
+            </Button>
+          </div>
+        )}
+      </div>
+    </Card>
+  </motion.div>
+</motion.section>
+
   </>
 }
